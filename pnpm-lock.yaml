@@ -21,7 +21,7 @@ dependencies:
     specifier: ^18.0.0
     version: 18.2.0(react@18.2.0)
   react-router-dom:
-    specifier: 6.23.1
+    specifier: ^6.23.1
     version: 6.23.1(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
