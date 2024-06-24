@@ -3,31 +3,24 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const RegisterScreen = () => {
+  const navigateTo = useNavigate();
   const [username, setUsername] = useState("");
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     console.log({ username, email, password });
-
     setEmail("");
-
     setUsername("");
-
     setPassword("");
+    navigateTo("/");
   };
 
   return (
     <main className="register">
       <h1 className="registerTitle">Create an account</h1>
-
       <form className="registerForm" onSubmit={handleSubmit}>
         <label htmlFor="username">Username</label>
-
         <input
           type="text"
           name="username"
@@ -36,9 +29,7 @@ const RegisterScreen = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-
         <label htmlFor="email">Email Address</label>
-
         <input
           type="text"
           name="email"
@@ -47,9 +38,7 @@ const RegisterScreen = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
         <label htmlFor="password">Password</label>
-
         <input
           type="password"
           name="password"
@@ -58,9 +47,7 @@ const RegisterScreen = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
         <button className="registerBtn">REGISTER</button>
-
         <p>
           Have an account? <Link to="/">Sign in</Link>
         </p>

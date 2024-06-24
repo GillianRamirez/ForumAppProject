@@ -4,6 +4,7 @@ import "./styles.css";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 import Dashboard from "./Dashboard";
+import LogoutButton from "./LogoutButton";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<LogoutButton />} />
       </Routes>
     </Router>
   );
