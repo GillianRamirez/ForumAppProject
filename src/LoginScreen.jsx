@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-import { Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,6 +15,8 @@ const Login = () => {
     setEmail("");
 
     setPassword("");
+    // Navigate to the dashboard on successful login
+    navigate("/dashboard");
   };
 
   return (

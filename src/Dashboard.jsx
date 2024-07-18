@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Nav from "./Nav";
+import axios from "axios";
 import CategoryMenu from "./CategoryMenu";
 import QuestionsList from "./QuestionsList";
+import LogoutButton from "./LogoutButton";
 
 const Dashboard = ({ username }) => {
   const [categories, setCategories] = useState([]);
@@ -58,19 +60,15 @@ const Dashboard = ({ username }) => {
   return (
     <>
       <Nav />
-
       <main className="dashboard">
         <h1 className="dashboardTitle">Your App Title</h1>
         <p>Welcome, {username}!</p>
-
         <LogoutButton onLogout={handleLogout} />
-
         <div className="dashboardContent">
           <CategoryMenu
             categories={categories}
             onSelectCategory={handleCategorySelect}
           />
-
           <div className="questionsList">
             {selectedCategory !== null ? (
               <QuestionsList
