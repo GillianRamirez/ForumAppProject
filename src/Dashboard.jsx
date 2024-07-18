@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Nav from "./Nav";
 import CategoryMenu from "./CategoryMenu";
 import QuestionsList from "./QuestionsList";
-import LogoutButton from "./LogoutButton";
 
 const Dashboard = ({ username }) => {
   const [categories, setCategories] = useState([]);
