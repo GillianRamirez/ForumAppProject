@@ -1,19 +1,22 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./styles.css";
-import LoginScreen from "./LoginScreen";
-import RegisterScreen from "./RegisterScreen";
-import Dashboard from "./Dashboard";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Register from "./components/RegisterScreen";
+import Login from "./components/LoginScreen";
+import Dashboard from "./components/Dashboard";
+import Replies from "./components/Replies";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginScreen />} />
-        <Route path="/register" element={<RegisterScreen />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/:id/replies" element={<Replies />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 };
 

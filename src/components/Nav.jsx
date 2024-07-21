@@ -9,7 +9,7 @@ const Nav = () => {
 
   return (
     <nav className="navbar">
-      <h2>Topic</h2>
+      <h2>Paint The Picture: An Art Media Q&A Forum</h2>
 
       <div className="navbarRight">
         <button onClick={signOut}>Sign out</button>
