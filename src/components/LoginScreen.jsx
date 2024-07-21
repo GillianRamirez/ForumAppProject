@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -33,7 +34,10 @@ const LoginScreen = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="loginBtn">SIGN IN</button>
+        <button className="loginBtn" type="submit">
+          SIGN IN
+        </button>{" "}
+        {/* Added type="submit" */}
         <p>
           Don't have an account? <Link to="/register">Create one</Link>
         </p>
@@ -41,4 +45,5 @@ const LoginScreen = () => {
     </main>
   );
 };
+
 export default LoginScreen;
