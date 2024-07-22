@@ -4,10 +4,11 @@ import Register from "./components/RegisterScreen";
 import Login from "./components/LoginScreen";
 import Dashboard from "./components/Dashboard";
 import Replies from "./components/Replies";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   return (
-    <div>
+    <ErrorBoundary>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -16,7 +17,7 @@ const App = () => {
           <Route path="/:id/replies" element={<Replies />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </ErrorBoundary>
   );
 };
 

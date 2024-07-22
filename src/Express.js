@@ -1,9 +1,13 @@
 const express = require("express");
+const cors = require("cors");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 
 const app = express();
-const port = 3000;
+const port = 3306;
+
+// Use CORS middleware
+app.use(cors());
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
@@ -11,7 +15,6 @@ const connection = mysql.createConnection({
   user: "root",
   password: "password",
   database: "your_database_name",
-  port: "3306",
 });
 
 // Connect to MySQL
