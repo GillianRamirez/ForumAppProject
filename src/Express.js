@@ -2,12 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
+const fetch = require("node-fetch");
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Use CORS middleware
+// Middleware
 app.use(cors());
+app.use(bodyParser.json());
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
@@ -26,8 +28,19 @@ connection.connect((err) => {
   console.log("Connected to MySQL database");
 });
 
-// Middleware
-app.use(bodyParser.json());
+// Proxy route
+app.get("/proxy/cloudflare-insights", async (req, res) => {
+  try {
+    const response = await fetch(
+      "https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015",
+    );
+    const body = await response.text();
+    res.setHeader("Content-Type", "application/javascript");
+    res.send(body);
+  } catch (error) {
+    res.status(500).send("Error fetching script");
+  }
+});
 
 // API endpoints
 app.get("/api/categories", (req, res) => {
@@ -62,10 +75,6 @@ app.post("/api/logout", (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
 // Fetch all threads
 app.get("/api/threads", (req, res) => {
   const sql =
@@ -141,4 +150,15 @@ app.post("/api/questions", (req, res) => {
       res.status(201).json({ id: results.insertId });
     },
   );
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({ error: "An unexpected error occurred" });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
