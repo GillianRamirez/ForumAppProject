@@ -10,10 +10,17 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET/POST",
+    allowedHeaders: "Content-Type,Authorization",
+  }),
+);
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
-  host: "localhost",
+  host: "0.0.0.0",
   user: "root",
   password: "password",
   database: "your_database_name",
