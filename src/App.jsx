@@ -7,6 +7,7 @@ import Replies from "./components/Replies";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Nav from "./components/Nav";
 
+
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("_id");
 
