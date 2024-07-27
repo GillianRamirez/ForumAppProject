@@ -1,52 +1,77 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Replies = () => {
-  const { id } = useParams();
-  const [reply, setReply] = useState("");
-  const [replies, setReplies] = useState([]);
+function Replies() {
+  const { question_id } = useParams();
+  const navigate = useNavigate();
+
+  const [question, setQuestion] = useState(null);
+  const [values, setValues] = useState({
+    answer: "",
+    question_id: question_id,
+    user_id: localStorage.getItem("user_id") || "",
+  });
 
   useEffect(() => {
-    fetch(`/api/threads/${id}/replies`)
-      .then((response) => response.json())
-      .then((data) => setReplies(data))
-      .catch((error) => console.error("Error fetching replies:", error));
-  }, [id]);
+    axios
+      .get(`http://localhost:4000/question/${question_id}`)
+      .then((res) => {
+        setQuestion(res.data);
+      })
+      .catch((err) => console.error(err));
+  }, [question_id]);
 
-  const handleSubmitReply = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
-    console.log({ reply });
-    setReply("");
-  };
+
+    axios
+      .post("http://localhost:4000/Replies", values)
+      .then((res) => {
+        console.log(res);
+        navigate("/");
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  }
 
   return (
-    <main className="replies">
-      <form className="modal__content" onSubmit={handleSubmitReply}>
-        <label htmlFor="reply">Reply to the thread</label>
-        <textarea
-          rows={5}
-          value={reply}
-          onChange={(e) => setReply(e.target.value)}
-          type="text"
-          name="reply"
-          className="modalInput"
-        />
-        <button className="modalBtn">SEND</button>
+    <div className="reply-container">
+      <h1>Answer Question:</h1>
+      {question ? (
+        <>
+          <h2>{question.question_title}</h2>
+          <p>{question.question}</p>
+        </>
+      ) : (
+        <p>Loading question...</p>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="reply">
+            Answer:
+            <br />
+            <textarea
+              name="reply"
+              id="reply"
+              className="reply-input"
+              value={values.answer}
+              onChange={handleInputChange}
+            />
+          </label>
+        </div>
+        <br />
+        <div>
+          <input type="submit" value="Submit" />
+        </div>
       </form>
-      <h2 className="repliesTitle">Replies</h2>
-      <ul>
-        {replies.map((reply) => (
-          <li key={reply.id}>
-            <p>{reply.content}</p>
-            <small>
-              by {reply.username} on{" "}
-              {new Date(reply.created_at).toLocaleString()}
-            </small>
-          </li>
-        ))}
-      </ul>
-    </main>
+    </div>
   );
-};
+}
 
 export default Replies;
