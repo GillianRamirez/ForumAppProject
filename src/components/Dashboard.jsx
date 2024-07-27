@@ -46,7 +46,6 @@ function Dashboard() {
 
       <h3>Welcome, {username}!</h3>
       <br />
-
       <div>
         <table>
           <thead>

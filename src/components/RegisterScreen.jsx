@@ -25,7 +25,7 @@ function RegisterScreen() {
     }
 
     try {
-      await axios.post("http://localhost:4000/signup", {
+      await axios.post("http://localhost:4000/RegisterScreen", {
         username,
         email,
         password,
@@ -95,7 +95,7 @@ function RegisterScreen() {
           <br />
           Already have an account? &nbsp;
           <button>
-            <Link to="/login">Login</Link>
+            <Link to="/">Login</Link>
           </button>
         </form>
       </div>

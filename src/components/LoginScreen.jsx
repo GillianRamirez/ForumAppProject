@@ -22,7 +22,9 @@ function LoginScreen() {
       localStorage.setItem("username", username); // Store the username
       localStorage.setItem("user_id", response.data.user_id);
       setAuthenticated(true); // Update isAuthenticated state
-      navigate("/", { state: { message: "Login successful!", username } });
+      navigate("/dashboard", {
+        state: { message: "Login successful!", username },
+      });
     } catch (e) {
       alert("Login failed");
       console.log(e);
@@ -62,7 +64,7 @@ function LoginScreen() {
           <br />
           Don't have an account? &nbsp;
           <button className="btn">
-            <Link to="/signup">Signup</Link>
+            <Link to="/RegisterScreen">Signup</Link>
           </button>
         </form>
       </div>

@@ -5,14 +5,14 @@ const bodyParser = require("body-parser");
 const fetch = require("node-fetch");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:4000",
     methods: "GET/POST",
     allowedHeaders: "Content-Type,Authorization",
   }),

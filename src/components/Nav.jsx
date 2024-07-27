@@ -19,7 +19,7 @@ function Nav() {
     <div className="sidebar-container">
       <ul>
         <div className="sidebar-item">
-          <Link to="/Dashboard">
+          <Link to="/dashboard">
             <li>Home</li>
           </Link>
         </div>
