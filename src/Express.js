@@ -20,7 +20,7 @@ app.use(
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
-  host: "0.0.0.0",
+  host: "localhost",
   user: "root",
   password: "password",
   database: "your_database_name",

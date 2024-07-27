@@ -1,72 +1,106 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Link } from "react-router-dom";
-
-const RegisterScreen = () => {
+function RegisterScreen() {
   const [username, setUsername] = useState("");
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agree, setAgree] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  async function submit(e) {
     e.preventDefault();
 
-    console.log({ username, email, password });
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
 
-    setEmail("");
+    if (!agree) {
+      alert("You must agree to the Terms and Conditions and Privacy Policy!");
+      return;
+    }
 
-    setUsername("");
-
-    setPassword("");
-  };
+    try {
+      await axios.post("http://localhost:4000/signup", {
+        username,
+        email,
+        password,
+      });
+      navigate("/", { state: { message: "Account created successfully!" } });
+    } catch (e) {
+      alert("Signup failed!");
+      console.log(e);
+    }
+  }
 
   return (
-    <main className="register">
-      <h1 className="registerTitle">Create an account</h1>
-
-      <form className="registerForm" onSubmit={handleSubmit}>
-        <label htmlFor="username">Username</label>
-
-        <input
-          type="text"
-          name="username"
-          id="username"
-          required
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-
-        <label htmlFor="email">Email Address</label>
-
-        <input
-          type="text"
-          name="email"
-          id="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <label htmlFor="password">Password</label>
-
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button className="registerBtn">REGISTER</button>
-
-        <p>
-          Have an account? <Link to="/">Sign in</Link>
-        </p>
-      </form>
-    </main>
+    <>
+      <div className="signup-container">
+        <h1>Signup</h1>
+        <form action="POST" onSubmit={submit}>
+          <input
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            id="usernameInput"
+            required
+          />{" "}
+          <br />
+          <br />
+          <input
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            id="emailInput"
+            required
+          />{" "}
+          <br />
+          <br />
+          <input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            id="passwordInput"
+            required
+          />{" "}
+          <br />
+          <br />
+          <input
+            type="password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
+            id="confirmPasswordInput"
+            required
+          />{" "}
+          <br />
+          <br />
+          <input
+            type="checkbox"
+            id="agreeCheckbox"
+            checked={agree}
+            onChange={(e) => setAgree(e.target.checked)}
+            required
+          />
+          <label htmlFor="agreeCheckbox">
+            {" "}
+            I agree to the Terms and Conditions and Privacy Policy
+          </label>{" "}
+          <br />
+          <br />
+          <button type="submit">Signup</button> <br />
+          <br />
+          Already have an account? &nbsp;
+          <button>
+            <Link to="/login">Login</Link>
+          </button>
+        </form>
+      </div>
+    </>
   );
-};
+}
 
 export default RegisterScreen;

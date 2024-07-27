@@ -1,65 +1,73 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "/src/context/AuthContext.jsx"; // Import useAuth hook
 
-function LoginScreen() {
-  const [email, setEmail] = useState("");
+function Login() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setAuthenticated } = useAuth(); // Call useAuth hook inside the component body
 
-  const handleSubmit = (e) => {
+  async function submit(e) {
     e.preventDefault();
-    // Dummy validation for email format
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
 
-    // Simulate login process
-    if (email === "test@example.com" && password === "password") {
-      console.log({ email, password });
-      setEmail("");
-      setPassword("");
-      navigate("/dashboard");
-    } else {
-      setError("Invalid email or password.");
+    try {
+      const response = await axios.post("http://localhost:4000/login", {
+        username,
+        password,
+      });
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", username); // Store the username
+      localStorage.setItem("user_id", response.data.user_id);
+      setAuthenticated(true); // Update isAuthenticated state
+      navigate("/", { state: { message: "Login successful!", username } });
+    } catch (e) {
+      alert("Login failed");
+      console.log(e);
     }
-  };
+  }
 
   return (
-    <main className="login">
-      <h1 className="loginTitle">Log into your account</h1>
-      {error && <p className="error">{error}</p>}
-      <form className="loginForm" onSubmit={handleSubmit}>
-        <label htmlFor="email">Email Address</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          required
-          aria-describedby="emailHelp"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" className="loginBtn">
-          SIGN IN
-        </button>
-        <p>
-          Don't have an account? <Link to="/register">Create one</Link>
-        </p>
-      </form>
-    </main>
+    <>
+      <div className="login-container">
+        <h1>Login</h1>
+
+        <form className="login-form" action="POST">
+          <input
+            type="text"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+            placeholder="Username"
+            id="usernameInput"
+          />{" "}
+          <br />
+          <br />
+          <input
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Password"
+            id="passwordInput"
+          />{" "}
+          <br />
+          <br />
+          <button onClick={submit} className="btn">
+            Login
+          </button>
+          <br />
+          <br />
+          Don't have an account? &nbsp;
+          <button className="btn">
+            <Link to="/signup">Signup</Link>
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 
-export default LoginScreen;
+export default Login;

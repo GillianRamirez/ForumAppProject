@@ -1,23 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useAuth } from "/src/context/AuthContext.jsx";
 
-const categoryMapping = {
-  1: "Traditional Media",
-  2: "Digital Media",
-};
-
-function Dashboard() {
+function DigitalMedia() {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
-  const navigate = useNavigate();
-  const username = localStorage.getItem("username") || "Guest";
-  const userId = localStorage.getItem("user_id");
   const isLoggedIn = !!localStorage.getItem("token");
+  const { isAuthenticated } = useAuth();
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/")
+      .get("http://localhost:4000?category_id=4")
       .then((res) => {
         setQuestions(res.data);
         res.data.forEach((question) => {
@@ -41,17 +36,15 @@ function Dashboard() {
   };
 
   return (
-    <div className="home-container">
-      <h1>Paint The Picture: An Art Media Q&A Forum</h1>
-
-      <h3>Welcome, {username}!</h3>
+    <div className="dm-container">
+      <h1>Paint The Picture : Digital Media</h1>
+      <p>list digital media items here</p>
       <br />
 
       <div>
         <table>
           <thead>
             <tr>
-              <th>Category</th>
               <th>Question</th>
               <th>Question Actions</th>
               <th>Answers</th>
@@ -62,7 +55,6 @@ function Dashboard() {
           <tbody>
             {questions.map((question) => (
               <tr key={question.question_id}>
-                <td>{categoryMapping[question.category_id]}</td>
                 <td>
                   <h4>{question.question_title},</h4>
                   {question.question}
@@ -132,8 +124,8 @@ function Dashboard() {
           </tbody>
         </table>
       </div>
-      {isLoggedIn && (
-        <Link to="/post" className="edit">
+      {isLoggedIn && isAuthenticated && (
+        <Link to="/post" className="edit" state={{ category_id: "2" }}>
           Post Question
         </Link>
       )}
@@ -141,4 +133,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DigitalMedia;
