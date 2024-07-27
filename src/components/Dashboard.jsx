@@ -3,8 +3,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const categoryMapping = {
-  1: "Traditional Media",
-  2: "Digital Media",
+  3: "Traditional Media",
+  4: "Digital Media",
 };
 
 function Dashboard() {

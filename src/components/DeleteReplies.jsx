@@ -8,7 +8,7 @@ function DeleteReplies() {
 
   useEffect(() => {
     axios
-      .delete(`http://localhost:4000/delete-answer/${id}`)
+      .delete(`http://localhost:4000/delete-reply/${id}`)
       .then((res) => {
         console.log(res.data);
         navigate("/");

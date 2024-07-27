@@ -8,7 +8,7 @@ function Replies() {
 
   const [question, setQuestion] = useState(null);
   const [values, setValues] = useState({
-    answer: "",
+    reply: "",
     question_id: question_id,
     user_id: localStorage.getItem("user_id") || "",
   });

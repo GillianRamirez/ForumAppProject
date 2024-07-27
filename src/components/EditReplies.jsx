@@ -4,7 +4,7 @@ import axios from "axios";
 
 function EditReplies() {
   const { id } = useParams();
-  const [replies, setReplies] = useState("");
+  const [reply, setReplies] = useState("");
   const [questionId, setQuestionId] = useState(null);
   const [userId, setUserId] = useState(localStorage.getItem("user_id") || "");
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function EditReplies() {
     axios
       .get(`http://localhost:4000/edit-replies/${id}`)
       .then((res) => {
-        setReplies(res.data.answer);
+        setReplies(res.data.reply);
         setQuestionId(res.data.question_id);
         setUserId(res.data.user_id); // Set the user ID from the fetched data
       })
@@ -24,8 +24,8 @@ function EditReplies() {
     e.preventDefault();
     axios
       .post("http://localhost:4000/edit-replies", {
-        replies_id: id,
-        replies: answer,
+        reply_id: id,
+        reply: reply,
         question_id: questionId,
         user_id: userId,
       })
@@ -44,7 +44,7 @@ function EditReplies() {
           <label>Answer:</label>
           <input
             type="text"
-            value={replies}
+            value={reply}
             onChange={(e) => setReplies(e.target.value)}
           />
         </div>
