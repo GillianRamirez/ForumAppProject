@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "/src/context/AuthContext.jsx"; // Import useAuth hook
 
-function Login() {
+function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:4000/login", {
+      const response = await axios.post("http://localhost:4000/LoginScreen", {
         username,
         password,
       });
@@ -70,4 +70,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginScreen;
