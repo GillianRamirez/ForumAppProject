@@ -24,16 +24,22 @@ function RegisterScreen() {
       return;
     }
 
+    console.log("Submitting:", { username, email, password });
+
     try {
-      await axios.post("http://localhost:4000/RegisterScreen", {
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:4000/RegisterScreen",
+        {
+          username,
+          email,
+          password,
+        },
+      );
+      console.log("Response:", response.data);
       navigate("/", { state: { message: "Account created successfully!" } });
     } catch (e) {
       alert("Signup failed!");
-      console.log(e);
+      console.log("Error:", e);
     }
   }
 
@@ -95,7 +101,7 @@ function RegisterScreen() {
           <br />
           Already have an account? &nbsp;
           <button>
-            <Link to="/">Login</Link>
+            <Link to="/dashboard">Login</Link>
           </button>
         </form>
       </div>

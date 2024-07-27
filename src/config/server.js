@@ -228,7 +228,7 @@ app.post("/RegisterScreen", async (req, res) => {
     [username, email],
     async (err, result) => {
       if (err) {
-        console.error("Database error:", err);
+        console.error("Database error (select):", err);
         return res.status(500).send("Server error");
       }
 
@@ -244,7 +244,7 @@ app.post("/RegisterScreen", async (req, res) => {
         [username, email, hashedPassword],
         (err, result) => {
           if (err) {
-            console.error("Database error:", err);
+            console.error("Database error (insert):", err);
             return res.status(500).send("Server error");
           }
 
