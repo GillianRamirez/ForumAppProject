@@ -1,4 +1,4 @@
-const conn = require("./config/connection");
+const conn = require("./connection.js");
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -16,25 +16,6 @@ app.use(cors());
 
 dotenv.config();
 
-const app = express();
-
-// Create connection to the database
-const db = mysql.createConnection({
-  host: process.env.HOST,
-  user: process.env.DB_USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-  port: process.env.DB_PORT,
-});
-
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log("MySQL Connected...");
-});
-
 // Listen on port 4000
 app.listen(4000, () => {
   console.log("Server running on http://localhost:4000");
@@ -48,6 +29,9 @@ app.use(
   }),
 );
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 // Define a route for the root path
 app.get("/dashboard", (req, res) => {
   const categoryId = req.query.category_id; // Get category_id from query parameters
@@ -224,7 +208,7 @@ app.post("/RegisterScreen", async (req, res) => {
   console.log("Received request:", req.body);
 
   conn.query(
-    "SELECT * FROM users WHERE username = ? OR user_email = ?",
+    "SELECT * FROM users WHERE user_name = ? OR user_email = ?",
     [username, email],
     async (err, result) => {
       if (err) {
@@ -240,7 +224,7 @@ app.post("/RegisterScreen", async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       conn.query(
-        "INSERT INTO users (username, user_email, password) VALUES (?, ?, ?)",
+        "INSERT INTO users (user_name, user_email, password) VALUES (?, ?, ?)",
         [username, email, hashedPassword],
         (err, result) => {
           if (err) {
@@ -257,45 +241,48 @@ app.post("/RegisterScreen", async (req, res) => {
 });
 
 // Login Route
-app.post("/", (req, res) => {
+app.post("/login", (req, res) => {
   const { username, password } = req.body;
-
+  console.log("hitting log");
   // Find user
   conn.query(
-    "SELECT * FROM users WHERE username = ?",
+    "SELECT * FROM users WHERE user_name = ?;",
     [username],
     async (err, result) => {
+      console.log("getting result");
       if (err) {
         console.error(err);
         return res.status(500).send("Server error");
       }
-
+      console.log("no errors, moving on");
       if (result.length === 0) {
         return res.status(404).send("User not found");
       }
 
       const user = result[0];
-
+      console.log("user is", user);
       // Check password
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
+        console.log("passwords are not matched, not generating token");
         return res.status(401).send("Invalid credentials");
       }
 
       // Generate JWT token
+      console.log("passwords matched, generating token");
       const token = jwt.sign(
-        { id: user.user_id, username: user.username },
+        { id: user.user_id, username: user.user_name },
         JWT_SECRET,
         { expiresIn: "1h" },
       );
-
+      console.log("user logged in successfully");
       // Send token and user_id back to client
-      res.json({
-        message: "User logged in successfully",
-        token: token,
-        user_id: user.user_id,
-      });
     },
   );
+  res.json({
+    message: "User logged in successfully",
+    token: token,
+    user_id: user.user_id,
+  });
 });

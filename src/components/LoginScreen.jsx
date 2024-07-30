@@ -13,10 +13,17 @@ function LoginScreen() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:4000/LoginScreen", {
-        username,
-        password,
-      });
+      const response = axios
+        .post("http://localhost:4000/login", {
+          username,
+          password,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", username); // Store the username
