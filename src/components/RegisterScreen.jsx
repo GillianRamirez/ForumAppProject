@@ -101,7 +101,7 @@ function RegisterScreen() {
           <br />
           Already have an account? &nbsp;
           <button>
-            <Link to="/dashboard">Login</Link>
+            <Link to="/">Login</Link>
           </button>
         </form>
       </div>
