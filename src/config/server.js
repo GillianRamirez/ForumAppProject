@@ -241,48 +241,67 @@ app.post("/RegisterScreen", async (req, res) => {
 });
 
 // Login Route
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   console.log("hitting log");
-  // Find user
-  conn.query(
-    "SELECT * FROM users WHERE user_name = ?;",
-    [username],
-    async (err, result) => {
-      console.log("getting result");
-      if (err) {
-        console.error(err);
-        return res.status(500).send("Server error");
-      }
-      console.log("no errors, moving on");
-      if (result.length === 0) {
-        return res.status(404).send("User not found");
-      }
 
-      const user = result[0];
-      console.log("user is", user);
-      // Check password
-      const isMatch = await bcrypt.compare(password, user.password);
+  try {
+    // Find user
+    conn.query(
+      "SELECT * FROM users WHERE user_name = ?;",
+      [username],
+      async (err, result) => {
+        console.log("getting result");
+        if (err) {
+          console.error(err);
+          return res.status(500).send("Server error");
+        }
+        console.log("no errors, moving on");
+        if (result.length === 0) {
+          return res.status(404).send("User not found");
+        }
 
-      if (!isMatch) {
-        console.log("passwords are not matched, not generating token");
-        return res.status(401).send("Invalid credentials");
-      }
+        const user = result[0];
+        console.log("user is", user);
 
-      // Generate JWT token
-      console.log("passwords matched, generating token");
-      const token = jwt.sign(
-        { id: user.user_id, username: user.user_name },
-        JWT_SECRET,
-        { expiresIn: "1h" },
-      );
-      console.log("user logged in successfully");
-      // Send token and user_id back to client
-    },
-  );
-  res.json({
-    message: "User logged in successfully",
-    token: token,
-    user_id: user.user_id,
-  });
+        // Log the passwords for debugging (Remove this in production)
+        console.log("provided password:", password);
+        console.log("stored hashed password:", user.password);
+
+        // Check password
+        try {
+          const isMatch = await bcrypt.compare(password, user.password);
+          console.log("isMatch result:", isMatch);
+
+          if (!isMatch) {
+            console.log("passwords are not matched, not generating token");
+            return res.status(401).send("Invalid credentials");
+          }
+
+          // Generate JWT token
+          console.log("passwords matched, generating token");
+          const token = jwt.sign(
+            { id: user.user_id, username: user.user_name },
+            JWT_SECRET,
+            { expiresIn: "1h" },
+          );
+          console.log("user logged in successfully");
+          // Send token and user_id back to client
+          return res.json({
+            message: "User logged in successfully",
+            token: token,
+            user_id: user.user_id,
+          });
+        } catch (compareError) {
+          console.error("Error comparing passwords:", compareError);
+          return res
+            .status(500)
+            .send("Server error during password comparison");
+        }
+      },
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
 });

@@ -12,7 +12,7 @@ function Nav() {
     localStorage.removeItem("username"); // Clear the username
     localStorage.removeItem("user_id");
     setAuthenticated(false);
-    navigate("/LoginScreen");
+    navigate("/");
   };
 
   return (
