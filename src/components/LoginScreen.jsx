@@ -26,7 +26,7 @@ function LoginScreen() {
         });
 
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("username", username); // Store the username
+      localStorage.setItem("user_name", username); // Store the username
       localStorage.setItem("user_id", response.data.user_id);
       setAuthenticated(true); // Update isAuthenticated state
       navigate("/dashboard", {

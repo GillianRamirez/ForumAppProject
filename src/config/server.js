@@ -277,7 +277,7 @@ app.post("/login", async (req, res) => {
 
         // Check password
         try {
-          const isMatch = await bcrypt.compare(password, user.password);
+          const isMatch = await bcrypt.compare(user.password, password);
           console.log("Password comparison result:", isMatch);
 
           if (!isMatch) {
