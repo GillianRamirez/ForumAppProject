@@ -30,7 +30,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.file("/login");
 });
 // Define a route for the root path
 app.get("/dashboard", (req, res) => {
@@ -205,6 +205,8 @@ app.delete("/delete-replies/:id", (req, res) => {
 app.post("/RegisterScreen", async (req, res) => {
   const { username, email, password } = req.body;
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   console.log("Received request:", req.body);
 
   conn.query(
@@ -222,7 +224,6 @@ app.post("/RegisterScreen", async (req, res) => {
       }
 
       try {
-        const hashedPassword = await bcrypt.hash(password, 10);
         console.log("Hashed password:", hashedPassword);
 
         conn.query(
@@ -271,45 +272,39 @@ app.post("/login", async (req, res) => {
         const user = result[0];
         console.log("User found:", user);
 
-        // Log the passwords for debugging (Remove this in production)
+        // Compare password using bcrypt
+        let isMatch = await bcrypt.compare(password, user.password);
+
+        console.log("\nDisplaying Password variables");
         console.log("Provided password:", password);
         console.log("Stored hashed password:", user.password);
 
-        // Check password
-        try {
-          const isMatch = await bcrypt.compare(user.password, password);
-          console.log("Password comparison result:", isMatch);
+        console.log("\nDisplaying value of isMatch:");
+        console.log(isMatch);
 
-          if (!isMatch) {
-            console.log("Passwords do not match");
-            return res.status(401).send("Invalid credentials");
-          }
-
-          // Generate JWT token
-          console.log("Passwords match, generating token");
-          const token = jwt.sign(
-            { id: user.user_id, username: user.user_name },
-            JWT_SECRET,
-            { expiresIn: "1h" },
-          );
-          console.log("User logged in successfully");
-
-          // Send token and user_id back to client
-          return res.json({
-            message: "User logged in successfully",
-            token: token,
-            user_id: user.user_id,
+        if (!isMatch) {
+          console.log("Passwords do not match");
+          return res.status(401).json({
+            errors: [
+              {
+                msg: "The Passwords do not match!",
+              },
+            ],
           });
-        } catch (compareError) {
-          console.error("Error comparing passwords:", compareError);
-          return res
-            .status(500)
-            .send("Server error during password comparison");
         }
+
+        // Passwords match, generate JWT token
+        console.log("Passwords match, generating token");
+        const token = jwt.sign(
+          { id: user.user_id, username: user.user_name },
+          JWT_SECRET,
+          { expiresIn: "1h" },
+        );
+        return res.json({ token });
       },
     );
   } catch (error) {
-    console.error("General server error:", error);
-    res.status(500).send("Server error");
+    console.error("Error in login route:", error);
+    return res.status(500).send("Server error");
   }
 });

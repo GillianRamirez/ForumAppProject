@@ -11,14 +11,20 @@ dependencies:
   bcrypt:
     specifier: ^5.1.1
     version: 5.1.1
+  body-parser:
+    specifier: ^1.20.2
+    version: 1.20.2
   cors:
     specifier: ^2.8.5
     version: 2.8.5
+  dotenv:
+    specifier: ^16.4.5
+    version: 16.4.5
   ejs:
     specifier: ^3.1.10
     version: 3.1.10
   express:
-    specifier: 4.19.2
+    specifier: ^4.19.2
     version: 4.19.2
   express-session:
     specifier: ^1.18.0
@@ -56,7 +62,7 @@ devDependencies:
     specifier: 4.4.4
     version: 4.4.4
   vite:
-    specifier: ^5.0.11
+    specifier: ^5.1.1
     version: 5.1.1
 
 packages:
@@ -853,7 +859,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001581
+      caniuse-lite: 1.0.30001651
       electron-to-chromium: 1.4.651
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.3)
@@ -876,8 +882,8 @@ packages:
       set-function-length: 1.2.0
     dev: false
 
-  /caniuse-lite@1.0.30001581:
-    resolution: {integrity: sha512-whlTkwhqV2tUmP3oYhtNfaWGYHDdS3JYFQBKXxcUR9qqPWsRhFHhoISO2Xnl/g0xyKzht9mI1LZpiNWfMzHixQ==}
+  /caniuse-lite@1.0.30001651:
+    resolution: {integrity: sha512-9Cf+Xv1jJNe1xPZLGuUXLNkE1BoDkqRqYyFJ9TDYSqhduqA4hu4oR9HluGoWYQC/aj8WHjsGVV+bwkh0+tegRg==}
     dev: true
 
   /chalk@2.4.2:
@@ -1041,6 +1047,11 @@ packages:
   /detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
+    dev: false
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
     dev: false
 
   /ecdsa-sig-formatter@1.0.11:

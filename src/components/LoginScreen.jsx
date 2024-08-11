@@ -13,7 +13,7 @@ function LoginScreen() {
     e.preventDefault();
 
     try {
-      const response = axios
+      const response = await axios
         .post("http://localhost:4000/login", {
           username,
           password,
@@ -51,6 +51,7 @@ function LoginScreen() {
             }}
             placeholder="Username"
             id="usernameInput"
+            value={username}
           />{" "}
           <br />
           <br />
@@ -61,6 +62,7 @@ function LoginScreen() {
             }}
             placeholder="Password"
             id="passwordInput"
+            value={password}
           />{" "}
           <br />
           <br />
