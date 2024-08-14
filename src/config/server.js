@@ -6,21 +6,13 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = "Paint";
+const path = require("path");
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-
-dotenv.config();
-
-// Listen on port 4000
-app.listen(4000, () => {
-  console.log("Server running on http://localhost:4000");
-});
-
 app.use(
   cors({
     origin: "http://localhost:4000",
@@ -28,10 +20,21 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+dotenv.config();
 
-app.get("/", (req, res) => {
-  res.file("/login");
+// Listen on port 4000
+app.listen(4000, () => {
+  console.log("Server running on http://localhost:4000");
 });
+
+// Serve static files from the 'build' directory
+app.use(express.static(path.join(__dirname, "build")));
+
+// Handle all other routes by serving the 'index.html' file
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
 // Define a route for the root path
 app.get("/dashboard", (req, res) => {
   const categoryId = req.query.category_id; // Get category_id from query parameters
