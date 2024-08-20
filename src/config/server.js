@@ -28,11 +28,12 @@ app.listen(4000, () => {
 });
 
 // Serve static files from the 'build' directory
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "/build")));
+app.use(express.static("public"));
 
 // Handle all other routes by serving the 'index.html' file
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.jsx"));
 });
 
 // Define a route for the root path
